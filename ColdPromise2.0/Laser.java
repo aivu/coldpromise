@@ -1,13 +1,14 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 
 /**
  * A laser.
  * 
- * Alina Vuong
+ * @author Alina Vuong
  */
 public class Laser extends Actor {
+    /** Direction for the laser's path. */
     private String direction;
-    /** The distance covered per act-method */
+    /** The distance covered per act-method. */
     private int speed = 6;
     /** The amount of damage to be dealt on mobs/Jim (depending on who fired it). */
     private int damage = 20;
@@ -21,7 +22,7 @@ public class Laser extends Actor {
         className = theShooter;
     }
 
-    /** Act method. */
+    @Override
     public void act() {
         life--;
         checkDuration();
@@ -62,7 +63,7 @@ public class Laser extends Actor {
         if (className.equals("Jim")) {
             Mob mob = (Mob) getOneIntersectingObject(Mob.class);
             if (mob != null) {
-                mob.hit(damage, getX(), getY()); //getX() and getY() for knockback effect
+                mob.hit(damage, getX(), getY());
                 getWorld().removeObject(this);
             }
         } else if (className.equals("mob")) {

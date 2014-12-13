@@ -1,11 +1,11 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 import java.util.List;
 
 /**
  * Transports the player between maps.
  * There is one portal throughout the game.
  * 
- * Alina Vuong
+ * @author Alina Vuong
  */
 public class Portal extends Actor
 {
@@ -15,6 +15,8 @@ public class Portal extends Actor
     private GreenfootImage open = new GreenfootImage("lift-open.png");
     /** Image indicating the portal is closed. */
     public GreenfootImage closed = new GreenfootImage("lift-closed.png");
+
+    @Override
     public void act() {
         open();
         checkStep();
@@ -24,7 +26,6 @@ public class Portal extends Actor
     private void checkStep() {
         Daumscape daum = (Daumscape) getWorld();        
         Jim jim = (Jim) getOneIntersectingObject(Jim.class); 
-
         if (jim == null && alreadyTried == true) {
             alreadyTried = false;
         } else if (jim != null && alreadyTried == false) {
@@ -33,12 +34,11 @@ public class Portal extends Actor
         }
     }
     
-    /** Changes the portal image to open. */
+    /** Changes the portal image to open after mobs have been defeated and NPCs have been spoken to. */
     private void open() {
         Daumscape daum = (Daumscape) getWorld();
         List<DialogueBox> boxes = daum.getObjects(DialogueBox.class);
         if (daum.bossCount == 0 && daum.internCount == 0 && daum.npcCount == 0 && boxes.size() < 1) {
-            //boxes.size() parameter is so that the portal doesn't open until the conversations are over.
             this.setImage(open);
         }
     }

@@ -1,9 +1,9 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 
 /**
  * Intro scene sequence.
  *
- * @Alina Vuong
+ * @author Alina Vuong
  */
 public class Intro extends Actor {
     /** First scene. */
@@ -18,14 +18,17 @@ public class Intro extends Actor {
     private int proceedDelCount = 0;
     /** Minimum time required before proceeding to next scene is allowed. */
     private int proceedDelay = 15;
+    
     public Intro() {
         setImage(intro1);
     }
-    /** Act. */
+
+    @Override
     public void act() {
         proceedDelCount++;
         checkKeys();
     }
+    
     /** Proceeds to next scene if certain keys are pressed. */
     private void checkKeys() {
         if (Greenfoot.isKeyDown("enter") && proceedDelCount > proceedDelay) {

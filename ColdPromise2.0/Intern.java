@@ -1,33 +1,27 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 
 /**
- * 
- * Alina Vuong
+ * Intern class penguins.
+ * @author Alina Vuong
  * 2.23.13
  */
-public class Intern extends Mob
-{
-    public Intern()
-    {
+public class Intern extends Mob {
+    public Intern() {
         super();
-        
         health = 30;
         speed = 2;
-
         touchDmg = 10;
     }
 
-    public void act() 
-    {
+    @Override
+    public void act() {
         super.act();
     }    
 
-    public void checkHealth() //overrides checkHealth() in superclass Mob
-    {
-        if(health<=0)
-        {
+    @Override
+    public void checkHealth() {
+        if (health <= 0) {
             Daumscape daum = (Daumscape) getWorld();
-            
             daum.removeObject(this);
             daum.internCount--;
         }

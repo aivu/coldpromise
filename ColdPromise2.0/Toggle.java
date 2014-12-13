@@ -1,8 +1,8 @@
- import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+ import greenfoot.*;
 
 /**
  * This is the class Toggle. It regulates the sound settings of the game.
- * @Alina Vuong
+ * @author Alina Vuong
  */
 
 public class Toggle extends Actor {
@@ -14,13 +14,14 @@ public class Toggle extends Actor {
         noMusic = new GreenfootImage("noMusic.png");
         noSound = new GreenfootImage("noSound.png");
         allSound = new GreenfootImage("allSound.png");
-        
         setImage(allSound);
     }
-    /** Act. */
+
+    @Override
     public void act() {
         checkToggle();
-    }    
+    }
+
     /** Changes sound setting variable if clicked. */
     private void checkToggle() {
         if(Greenfoot.mouseClicked(this)) {
@@ -29,21 +30,19 @@ public class Toggle extends Actor {
             setSound();
         }
     }
+
     /** Changes sound according to setting. */
     private void setSound() {
         Daumscape daum = (Daumscape) getWorld();
         if (tog == 0) {
             daum.bgmOn = true;
             daum.soundOn = true;
-            
             setImage(allSound);
         } else if (tog == 1) {
             daum.bgmOn = false;
-            
             setImage(noMusic);
         } else if (tog == 2) {
             daum.soundOn = false;
-            
             setImage(noSound);
         }
     }

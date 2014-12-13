@@ -1,76 +1,66 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 import java.util.ArrayList;
 
 /**
- * 
+ * Non player character. The player interacts with them and initiates dialogue.
  * Alina Vuong
  * 2.24.13
  */
-public class NPC extends Penguin implements Speaker
-{
-    private boolean talkedTo = false; //tracks whether Jim has already talked to the NPC; prevents memory overflow
+public class NPC extends Penguin implements Speaker {
+    /** Tracks whether Jim has already talked to the NPC; prevents memory overflow. */
+    private boolean talkedTo = false;
+    /** Name of this NPC. */
     private String name;
-    public NPC() //generic NPCs for mapNum1
-    {
+    public NPC() {
         super();
-
         Daumscape daum = (Daumscape) getWorld();
         this.name = "Researcher";
-
         setDirection("right");
-        walkDelay = 250; //use this variable for changeDirection() b.c. it's convenient
+        walkDelay = 250;
     }
 
-    public NPC(String name)
-    {
+    public NPC(String name) {
         super();
-
         Daumscape daum = (Daumscape) getWorld();
         this.name = name;
-
         setDirection("right");
-        walkDelay = 250; //use this variable for changeDirection() b.c. it's convenient
+        walkDelay = 250;
     }
 
-    public void act() 
-    {
+    @Override
+    public void act() {
         super.act();
-        changeDirection(); //instead of super.walk(), because NPCs don't walk around
+        changeDirection();
         checkTalk();
     }    
 
-    private void changeDirection()
-    {
-        if(walkDelCount>walkDelay)
-        {
+    /** Changes direction of NPC after some time. */
+    private void changeDirection() {
+        if (walkDelCount > walkDelay) {
             walkDelCount = 0;
-            if(direction.equals("left"))
-            {
+            if (direction.equals("left")) {
                 setDirection("right");
-            }
-            else
-            {
+            } else {
                 setDirection("left");
             }
         }
     }
 
-    public void checkTalk()
-    {
+    /** Checks whether the player has initiated dialogue. */
+    public void checkTalk() {
         Daumscape daum = (Daumscape) getWorld();
         Jim jim = (Jim) getOneIntersectingObject(Jim.class);
-        if(jim!=null && talkedTo==false && daum.internCount+daum.bossCount==0)
-        {
+        if (jim != null && !talkedTo && daum.internCount + daum.bossCount == 0) {
             talkedTo = true;
             talk();
         }
     }
 
-    public void talk()
-    {
+    /** Initializes dialogue box for respective scenario. */
+    public void talk() {
         Daumscape daum = (Daumscape) getWorld();
         daum.npcCount--;
         DialogueBox box = new DialogueBox(name, 0);
-        daum.addObject(box, daum.getWidth()/2, daum.getHeight()-box.height+50);
+        daum.addObject(box, daum.getWidth() / 2, daum.getHeight() - box.height + 50);
     }
 }

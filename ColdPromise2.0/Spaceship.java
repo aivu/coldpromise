@@ -1,9 +1,9 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 
 /**
  * Spaceship.
  * 
- * @Alina Vuong
+ * @author Alina Vuong
  */
 public class Spaceship extends Actor {
     /** Counts time elapsed. */
@@ -12,16 +12,19 @@ public class Spaceship extends Actor {
     private int animateDelay = 30;
     /** Images for the ship. */
     private GreenfootImage ship1, ship2;
+    
     public Spaceship() {
         ship1 = new GreenfootImage("spaceship1.png");
         ship2 = new GreenfootImage("spaceship2.png");
         setImage(ship1);
     }
-    /** Act. */
+
+    @Override
     public void act() {
         animDelCount++;
         animate();
-    }    
+    }
+    
     /** Animates the image. */
     private void animate() {
         if (animDelCount > animateDelay) {

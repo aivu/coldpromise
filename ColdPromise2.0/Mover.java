@@ -1,12 +1,11 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 
 /**
  * All the moving characters.
  * 
- * Alina Vuong
+ * @author Alina Vuong
  */
 public class Mover extends Actor {
-    //animation fields
     /** Mob name of the class. */
     public String name;
     /** Direction of object's movement. */
@@ -38,6 +37,7 @@ public class Mover extends Actor {
     /** Counts time since last knockback. */
     public int kbDelCount = 0;
 
+    @Override
     public void act() {
         animate();
         bounceDelCount++;
@@ -47,6 +47,7 @@ public class Mover extends Actor {
         hpDelCount++;
         kbDelCount++;
     }
+
     /** Animates the object. */
     public void animate() {
         if (bounceDelCount > bounceDelay) {
@@ -66,6 +67,7 @@ public class Mover extends Actor {
             }
         }
     }
+
     /** Sets direction for this object's movement. */
     public void setDirection(String direction) {
         this.direction = direction;
@@ -80,9 +82,9 @@ public class Mover extends Actor {
             }
         }
     }
-    /** Deducts damage from this object if detects a hit. */
+
+    /** Deducts damage from this object if detects a hit. Reference: newAsteroids */
     public void hit(int damage, int x, int y) {
-        //will be invoked by the Laser and Mob classes. ref: newAsteroids
         if (dmgDelCount > dmgDelay) {
             dmgDelCount = 0;
             health -= damage;
@@ -90,39 +92,36 @@ public class Mover extends Actor {
         if (kbDelCount > knockbackDelay) {
             kbDelCount = 0;
             if (x > getX()) {
-                this.setLocation(getX()-kbDistance, getY());
+                this.setLocation(getX() - kbDistance, getY());
             } else if (x < getX()) {
-                this.setLocation(getX()+kbDistance, getY());
+                this.setLocation(getX() + kbDistance, getY());
             }
         }
     }
+
     /** Recovers HP for this object. */
-    public void add(int recovery) { //will be invoked by the Flan class. This method is really just for Jim
+    public void add(int recovery) {
         if (hpDelCount > hpDelay) {
             hpDelCount = 0;
             health += recovery;
         }
     }
 
-    public void fire() { //some parts of this and related methods were inspired by the newAsteroids project
+    /** Fires a laser. Reference and inspiration: newAsteroids. */
+    public void fire() {
         Daumscape daum = (Daumscape) getWorld();        
-        //note: you have to declare "daum" separately from whatever statements you reference it in
-        //e.g. it wouldn't work if you tried to declare it while trying to reference ".soundOn"
         if (atkDelCount > atkDelay) {
             atkDelCount = 0;
             Laser laser = new Laser(direction, name);
             daum.addObject(laser, getX(), getY());
-            //the laser sound effect is included in Mover.fire() so as to employ the delay counts already being
-            //used for the actual laser function
-            if (daum.soundOn) { //can't put this in the Laser constructor because you can't call other objects in an object's constructor
-                //I suppose because the object hasn't actually been constructed yet and nonexisting objects can't make other
-                //objects do things
+            if (daum.soundOn) {
                 Greenfoot.playSound("laser.mp3");
             }
         }
     }
+
     /** Moves the object. */
-    public void walk() { //don't put act()
+    public void walk() {
         if (direction.equals("right")) {
             if (walkDelCount > walkDelay) {
                 walkDelCount = 0;
@@ -133,29 +132,22 @@ public class Mover extends Actor {
                 }
             }
         }
-        if (direction.equals("left"))
-        {
-            if (walkDelCount>walkDelay)
-            {
+        if (direction.equals("left")) {
+            if (walkDelCount > walkDelay) {
                 walkDelCount = 0;
-                if (getImage()==imageL1 || getImage()==imageL2)
-                {
+                if (getImage() == imageL1 || getImage() == imageL2) {
                     setImage(imageLWalk);
-                }
-                else
-                {
+                } else {
                     setImage(imageL1);
                 }
             }
         }
     }
 
-    public boolean jimOK() 
-    //this would've been the method to use in some classes' act()s if the game ended upon Jim's defeat
-    {
+    /** Checks if the player's health has reached 0. */
+    public boolean jimOK() {
         Daumscape daum = (Daumscape) getWorld();
-        if (daum.jim.health>0) //prevents an IllegalStateException when Jim is defeated
-        {
+        if (daum.jim.health > 0) {
             return true;
         }
         return false;
