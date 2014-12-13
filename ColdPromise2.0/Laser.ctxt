@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.params=direction\ theShooter
+comment0.target=Laser(java.lang.String,\ java.lang.String)
+comment1.params=
+comment1.target=void\ act()
+comment1.text=Act\ method.
+comment2.params=
+comment2.target=void\ checkDuration()
+comment2.text=Checks\ if\ laser\ has\ reached\ end\ of\ lifespan.
+comment3.params=
+comment3.target=void\ move()
+comment3.text=Moves\ the\ laser\ according\ to\ its\ direction.
+comment4.params=
+comment4.target=boolean\ atWorldEdge()
+comment4.text=Returns\ true\ if\ the\ laser\ has\ reached\ the\ end\ of\ the\ world.
+comment5.params=
+comment5.target=void\ checkHit()
+comment5.text=If\ the\ laser\ encounters\ its\ className's\ opponent\ mob,\ deducts\ the\ mob's\ HP.
+numComments=6

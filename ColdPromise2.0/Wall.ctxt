@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.params=
+comment0.target=void\ act()
+comment1.params=
+comment1.target=void\ addBase()
+comment1.text=Adds\ walls\ to\ the\ sides\ of\ the\ world.\ Make\ static.
+comment2.params=
+comment2.target=void\ addOthers()
+comment2.text=Unimplemented.\ Intended\ use\ was\ to\ create\ different\ arrangements\ for\ maps.
+comment3.params=
+comment3.target=void\ checkImpact()
+comment3.text=\ Prevents\ the\ player\ from\ passing\ through\ the\ wall.\ Move\ to\ Jim\ class?\r\n
+numComments=4

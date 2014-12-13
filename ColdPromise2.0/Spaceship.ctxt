@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Spaceship()
+comment1.params=
+comment1.target=void\ act()
+comment1.text=Act.
+comment2.params=
+comment2.target=void\ animate()
+comment2.text=Animates\ the\ image.
+numComments=3
