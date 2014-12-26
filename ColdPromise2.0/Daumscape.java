@@ -1,53 +1,63 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 import java.util.ArrayList;
 import java.util.List;
-/**
- * @Alina Vuong 
+/** Daumscape -- the world class of the game. Holds all the pieces of the game.
+ * @author Alina Vuong 
  * 
  */
-public class Daumscape extends World
-{
-    public Jim jim; //for reference among classes
+public class Daumscape extends World {
+    /** The main character. */
+    public Jim jim;
+    /** The portal by which to move onto the next map. */
     private Portal port;
+    /** Counter displaying Jim's current HP. */
     private HPCounter counter;
+    /** Sox, the other main character. */
     public Sox sox;
-    private Collaborator larimen, calico, gunther; //for reference among this class's methods
+    /** The bosses. */
+    private Collaborator larimen, calico, gunther;
+    /** Toggle for music settings. */
     private Toggle toggle;
-
+    /** Checks whether there are any remaining mobs in the map. */
     private boolean mapIsClear;
-    public int mapNum; //for reference in classes NPC, DialogueBox, Sox, and Jim
-    public int totalMaps; //for endgame sequence, and invocation in Portal class
-
-    public int bossCount; //will track the bosses in the map
-    public int internCount; //will track the interns remaining in the map
-    public int npcCount; //will track remaining NPC interactions the player needs in order to move on
-    //important to remember: number in array must align with number actually added to world
-
-    private String[] counts = new String[18]; //the numbers are boss, interns and NPC counts, respectively
-
+    /** The current map, indicated by number. */
+    public int mapNum;
+    /** Total number of maps in the game. For endgame sequence and invocation in Portal class. */
+    public int totalMaps;
+    /** Tracks number of undefeated bosses in the map. */
+    public int bossCount;
+    /** Tracks number of undefeated interns remaining in the map. */
+    public int internCount;
+    /** Tracks number of NPCs not yet spoken to by the player in order to move on. */
+    public int npcCount;
+    /** Bosses, interns, and NPCs for the assigned map, respectively. */
+    private String[] counts = new String[18];
+    /** Final image for endgame background. */
     private GreenfootImage space = new GreenfootImage("space.jpg");
-    private int lastBoxDelCount = 0;
+    /** Set time for delay for final dialogue sequence. */
     private int lastBoxDelay = 250;
-    private boolean boxAdded, lastAdded, creditsAdded; //keeps certain boxes from being added funny at different parts of the game
-
+    /** Tracks delay for final dialogue sequence. */
+    private int lastBoxDelCount = 0;
+    /** For tracking beginning and end boxes from being added strangely. */
+    private boolean boxAdded, lastAdded, creditsAdded;
+    /** Default background music. */
     public GreenfootSound bgm = new GreenfootSound("Liquid Mountains.mp3");
+    /** Default setting for background music, which is true. */
     public boolean bgmOn = true;
+    /** Default setting for noise (e.g. lasers), which is true. */
     public boolean soundOn = true;
-    public Daumscape()
-    {    
+    public Daumscape() {    
         super(750, 550, 1); 
-
-        setPaintOrder(Intro.class, DialogueBox.class, HPCounter.class, Sox.class, Jim.class, Penguin.class, Laser.class, Flan.class, Portal.class, Toggle.class, Wall.class);
-
-        addObject(new Intro(), getWidth()/2, getHeight()/2);
+        setPaintOrder(Intro.class, DialogueBox.class, HPCounter.class, Sox.class, Jim.class, Penguin.class,
+            Laser.class, Flan.class, Portal.class, Toggle.class, Wall.class);
+        addObject(new Intro(), getWidth() / 2, getHeight() / 2);
         addJim();
         addCounter();
         addToggle();
         addPortal();
         addWalls();
-
         mapNum = 0;      
-        totalMaps = counts.length-1; //for the endgame sequence
+        totalMaps = counts.length - 1;
         counts[0] = "005"; //Ask Around
         counts[1] = "001"; //Regimund's Warning--save point
         counts[2] = "040"; //First Foray
@@ -58,7 +68,7 @@ public class Daumscape extends World
         counts[7] = "050";
         counts[8] = "060";
         counts[9] = "060";
-        counts[10] = "071";//Sox
+        counts[10] = "071"; //Sox
         counts[11] = "001"; 
         counts[12] = "040"; 
         counts[13] = "151";//Calico's Obstruction
@@ -70,9 +80,8 @@ public class Daumscape extends World
         internCount = Integer.parseInt(counts[mapNum].substring(1,2)); //honestly you could just use List<type> objects = getObjects(type) to retrieve the mob counts
         npcCount = Integer.parseInt(counts[mapNum].substring(2,3)); //not the NPC conversation counts though.
         setCounts(); //this method must be called after mapNum and the counts array are set
-
         changeMap(); //this method must be called AFTER the mapNum and counts are set.
-        //bgm.play();
+        bgm.play();
     }
 
     public void act() {        
@@ -101,100 +110,116 @@ public class Daumscape extends World
                     lastBoxDelCount = 0;
                     lastAdded = true;
                     DialogueBox box = new DialogueBox("",0);
-                    addObject(box, getWidth()/2, getHeight()-box.height+50);
+                    addObject(box, getWidth() / 2, getHeight() - box.height + 50);
                 }
             }
             if (lastAdded && !creditsAdded) {
                 List<DialogueBox> boxes = getObjects(DialogueBox.class);
                 if (boxes.size()<1) {
-                    //Prevents the credits from covering Sox's last line after only a small amount of time.
                     lastBoxDelCount++;
                 }
                 if (lastBoxDelCount > lastBoxDelay) {
-                    //no need to reset delay now
                     creditsAdded = true;
                     DialogueBox box = new DialogueBox("Credits",0);
-                    addObject(box, getWidth()/2, getHeight()-box.height+50);
+                    addObject(box, getWidth() / 2, getHeight() - box.height + 50);
                 }
             }
         }
     }
 
+    /** Adds the player. Is called only once at the beginning of the game. */
     private void addJim() {
-        //Jim will only be added once, at the beginning of the game; 
-        //thereafter map changes will simply move him back to his initial position
         jim = new Jim();
-        addObject(jim, jim.getImage().getWidth(), getHeight()/2); 
+        addObject(jim, jim.getImage().getWidth(), getHeight() / 2); 
     }
 
+    /** Adds the HP counter. Is called only once at the beginning of the game,
+     *  after Jim is initialized.
+     */
     private void addCounter() {
-        //will only be added at the beginning of the game.
-        counter = new HPCounter(); //add HPCounter after Jim because Jim needs to be initialized for the health field to exist
+        counter = new HPCounter();
         addObject(counter, 70, getHeight()-30);
     }
 
+    /** Adds the sound toggle. Is called only once at the beginning of the game. */
     private void addToggle() {
         toggle = new Toggle();
-        addObject(toggle, getWidth()-15, 20);
+        addObject(toggle, getWidth() - 15, 20);
     }
 
+    /** Adds the portal for navigating between maps. Is called only once at the beginning
+     * of the game.
+     */
     private void addPortal() {
-        //will only be added at the beginning of the game.
         port = new Portal();
-        addObject(port, getWidth()-port.getImage().getWidth()/2-5, getHeight()/2);
+        addObject(port, getWidth()-port.getImage().getWidth() / 2 - 5, getHeight() / 2);
     }
 
-    private void setCounts() { //will be invoked after every map
-        bossCount = Integer.parseInt(counts[mapNum].substring(0,1)); //this isn't "mapNum-1" b.c. mapNum will start at 0 for simplicity
-        internCount = Integer.parseInt(counts[mapNum].substring(1,2)); //same as above
+    /** Invoked after every map change. Sets the counts for the current map's
+     *  number of bosses, interns, and NPCs.
+     */
+    private void setCounts() {
+        bossCount = Integer.parseInt(counts[mapNum].substring(0,1));
+        internCount = Integer.parseInt(counts[mapNum].substring(1,2));
         npcCount = Integer.parseInt(counts[mapNum].substring(2,3)); 
     }
 
-    private void addBox() {//will only be added at the beginning of the game; explains keyboard controls
+    /** Adds the initial dialogue box sequence only once at the beginning of the game.
+     *  Explains keyboard controls.
+     */
+    private void addBox() {
         DialogueBox box = new DialogueBox("Instructions:", 0);
-        addObject(box, getWidth()/2, getHeight()-box.height+50);        
+        addObject(box, getWidth() / 2, getHeight() - box.height + 50);
     }    
 
-    private void addInterns() { //will be called after every map change
+    /** Called after every map change. Adds intern mobs to the map. */
+    private void addInterns() {
         for (int i = 0; i < internCount; i++)
         {
             Intern intern = new Intern();
-            addObject(intern, Greenfoot.getRandomNumber(getWidth()-300)+200, Greenfoot.getRandomNumber(getHeight()-100)+50);
+            addObject(intern, Greenfoot.getRandomNumber(getWidth() - 300) + 200,
+                Greenfoot.getRandomNumber(getHeight() - 100) + 50);
         }     
     }
 
-    private void addNPCs() {//will be called after every map change
+    /** Called after every map change. Adds NPCs to the map. */
+    private void addNPCs() {
         if (mapNum == 0) {
-            for (int i = 0; i < npcCount - 1; i++) {//to account for Jim's dialogue in first map
+            for (int i = 0; i < npcCount - 1; i++) {
                 NPC npc = new NPC();
-                addObject(npc, Greenfoot.getRandomNumber(getWidth()-200)+100, Greenfoot.getRandomNumber(getHeight()-200)+100);
+                addObject(npc, Greenfoot.getRandomNumber(getWidth() - 200) + 100,
+                    Greenfoot.getRandomNumber(getHeight() - 200) + 100);
             }
         } else if (mapNum == 1) {
             NPC regimund = new NPC("Regimund");
-            addObject(regimund, Greenfoot.getRandomNumber(getWidth()-200)+100, Greenfoot.getRandomNumber(getHeight()-200)+100);
+            addObject(regimund, Greenfoot.getRandomNumber(getWidth() - 200) + 100,
+                Greenfoot.getRandomNumber(getHeight() - 200) + 100);
         } else if (mapNum == 4) {
             NPC galea = new NPC("Galea");
-            addObject(galea, Greenfoot.getRandomNumber(getWidth()-200)+100, Greenfoot.getRandomNumber(getHeight()-200)+100);
+            addObject(galea, Greenfoot.getRandomNumber(getWidth() - 200) + 100,
+                Greenfoot.getRandomNumber(getHeight() - 200) + 100);
         } else if(mapNum==10) {
             sox = new Sox();
             addObject(sox, 600, 150);
         }
     }
 
-    private void addBosses() { //will be called after every map change
+    /** Called after every map change. Adds boss mobs to the map. */
+    private void addBosses() {
         if (mapNum == 3) {
             larimen = new Collaborator(2, 100, 20, 150);
-            addObject(larimen, 500, getHeight()/2);            
+            addObject(larimen, 500, getHeight() / 2);
         } else if (mapNum == 13) {
             calico = new Collaborator(3, 150, 30, 100);
-            addObject(calico, 500, getHeight()/2);        
+            addObject(calico, 500, getHeight()/2);   
         } else if (mapNum == 15) {
             gunther = new Collaborator(4, 200, 35, 75);
-            addObject(gunther, 500, getHeight()/2);        
+            addObject(gunther, 500, getHeight() / 2);    
         }
     }
 
-    public void addBossNPCs(int x, int y) { //will be invoked by the Collaborator class
+    /** Adds boss NPCs to the map. Called by Collaborator class. */
+    public void addBossNPCs(int x, int y) {
         if(mapNum == 3) {
             NPC larimen = new NPC("Larimen");
             addObject(larimen, x, y);
@@ -207,37 +232,41 @@ public class Daumscape extends World
         }
     }
 
-    private void addFlan() {//fix coordinates
+    /** Adds flan to certain maps. */
+    private void addFlan() {
         if (mapNum == 3 || mapNum == 11 || mapNum == 14) {
             Flan flan = new Flan();
-            addObject(flan, getWidth()/2, getHeight()/2);
+            addObject(flan, getWidth() / 2, getHeight() / 2);
         }
     }
-
-    private void addWalls() { //will be called after every map change
-        //create one wall and then have that wall create all the others
-        Wall one = new Wall(); // change to static
+    
+    /** Creates initial wall formation for game setting. */
+    private void addWalls() {
+        Wall one = new Wall();
         addObject(one, 0, 0);
         one.addBase();
-        one.addOthers();
     }
 
-    private void removeNPCs() { //will be called after every map change. Removes all objects from the NPC class from the world
+    /** Called after every map change. Removes all objects from the NPC class from the world. */
+    private void removeNPCs() {
         List<NPC> npcs = getObjects(NPC.class);
         removeObjects(npcs);
     }
 
+    /** Removes uneaten flan from the map. */
     private void removeFlan() {
         List<Flan> flans = getObjects(Flan.class);
         removeObjects(flans);
     }
 
+    /** Removes walls from the map. */
     private void removeWalls() {
         List<Wall> walls = getObjects(Wall.class);
         removeObjects(walls);
     }
 
-    public void checkClear() { //to be used for changeNext() in this class and will also be invoked in class Sox
+    /** To be used for changeNext() in this class and will also be invoked in class Sox. */
+    public void checkClear() {
         if ((internCount + bossCount) == 0 && npcCount <= 0) {
             mapIsClear = true;
         } else {
@@ -245,7 +274,8 @@ public class Daumscape extends World
         }
     }
 
-    public void changeNext() { //to be invoked by the Portal class
+    /** Invoked by the Portal class. Calls change for next map if the map has been cleared. */
+    public void changeNext() {
         checkClear();
         if (mapIsClear && mapNum < totalMaps) {
             mapNum++;
@@ -253,16 +283,16 @@ public class Daumscape extends World
         }
     }    
 
+    /** Changes the map; resets map settings, including NPCs, flan, bosses, interns, and/or walls. */
     public void changeMap() {
         if (mapNum < totalMaps) {
             removeNPCs();
-            //             removeWalls(); //no differing setups.
             removeFlan();
             mapIsClear = false;
-            jim.realized = false; //used for various bits of plot dialogue
-            jim.realizeDelCount = 0; //same as above
+            jim.realized = false;
+            jim.realizeDelCount = 0;
             setCounts();
-            jim.setLocation(jim.getImage().getWidth(), getHeight()/2);
+            jim.setLocation(jim.getImage().getWidth(), getHeight() / 2);
             port.setImage(port.closed);
 
             //Make sure all mapNum-sensitive methods come AFTER the mapNum change!!
@@ -276,10 +306,9 @@ public class Daumscape extends World
                 }
                 sox.talkedTo = false;
             }
-            if (jim.health < 0) { //for revival purposes
+            if (jim.health < 0) {
                 jim.health = 0;
             }        
-            //addWalls();
             addInterns();
             addNPCs();
             addBosses();
