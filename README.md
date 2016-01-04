@@ -1,9 +1,8 @@
 ColdPromise
 ===========
 Author: Alina Vuong
+Version 2.0
 
-V.2.0 (Last updated: 11/8/2014)
+You receive a mysterious and urgent letter from within the research facility run by penguins in Antarctica. You, unable to ignore this, head there to investigate! Could there be a fellow Woollie in some terrible plight here?
 
-Description: Single player game where the player must rescue a fellow alien and disrupt a conspiracy against their home planet.
-
-User Game Controls: Stated during gameplay; includes arrow keys, SPACE, and ENTER.
+View screenshots and a link to download the game here! http://aivu.itch.io/coldpromise
